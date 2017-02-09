@@ -79,6 +79,10 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 
     /*
     // MARK: - Navigation
@@ -90,4 +94,22 @@ class PhotosViewController: UIViewController, UITableViewDataSource, UITableView
     }
     */
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        
+        let vc = segue.destination as! PhotoDetailsViewController
+        let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
+        
+        let post = posts[(indexPath?.row)!]
+        let photos = post.value(forKeyPath: "photos") as? [NSDictionary]
+        vc.photoURLString = photos?[0].value(forKeyPath: "original_size.url") as! String!
+        
+        /*
+        if let photos = post.value(forKeyPath: "photos") as? [NSDictionary]{
+            if let photoURL = photos[(indexPath?.row)!].value(forKeyPath: "original_size_url") as? String{
+                vc.photoURLString = photoURL
+            }
+        }*/
+        
+    }
 }
